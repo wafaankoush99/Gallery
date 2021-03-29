@@ -1,0 +1,28 @@
+*{
+    box-sizing: border-box;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+
+    /* position: relative; */
+}
+
+p{
+    width:300px ;
+    display: block;
+
+}
+
+h2{
+    width: 300px;
+    display: inline;
+
+}
+img {
+    height: 300px;
+    width: 300px;
+    /* display: inline-block; */
+}   
