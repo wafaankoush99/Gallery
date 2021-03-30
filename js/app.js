@@ -1,65 +1,75 @@
 'use strict';
 
-$.ajax( '../data/page-1.json' ).then( arrOfObjGallery => {
-  arrOfObjGallery.forEach( photo => {
-    let newPhoto = new Photo( photo );
-    newPhoto.renderAll();
-    // console.log( photo );
+/////////////////////////////////////////////////////
+//////////getting data from page-1.json//////////////
+/////////////////////////////////////////////////////
+
+$.ajax( '/data/page-1.json' )
+  .then( allData =>{
+    allData.forEach( val =>{
+      let newItem = new Photo( val );
+      newItem.renderAll();
+    } );
+    let listItems = [...new Set( optionArray )];
+    listItems.forEach( option=> renderOption( option ) );
+    $( '#photo-template' ).first().remove();
   } );
-} );
-
-let myArr=[];
-function Photo( arrPhoto ) {
-  this.keyword= arrPhoto.keyword;
-  this.title = arrPhoto.title;
-  this.img = arrPhoto.image_url;
-  this.description = arrPhoto.description;
-  myArr.push( this );
-}
-
-let arr =[];
-console.log( arr );
 
 
-Photo.prototype.renderAll = function () {
+/////////////////////////////////////////////////////
+//////////Global Variables///////////////////////////
+/////////////////////////////////////////////////////
 
-  $( 'select' ).append( `<option value="${this.keyword}">${this.keyword}</option>` );
-  //   console.log( $( 'option' ).text() );
-  if( ! arr.includes( $( 'option' ).text() ) ){
-    arr.push( $( 'option' ).text() );
-    $( 'select' ).append( $( 'option' ) );}
-
-    $('#photo-template').append('<div></div>');
+let myArr = [];
+let optionArray = [];
 
 
-  // $('#photo-template').append('<div></div>');
+/////////////////////////////////////////////////////
+//////////Prototype//Rendering///////////////////////
+/////////////////////////////////////////////////////
 
-  $( 'div' ).prepend( `
-    <h2> ${this.title} </h2>
-    ` );
-
-  $( 'div' ).prepend( `
-    <p> ${this.description} </p>
-    ` );
-
-  $( 'div' ).prepend( `<img src='${this.img}' alt="">` );
-
-  $('#photo-template').append('<div></div>');
-
-  // $( '#photo-template' ).append( `
-  //   <h2> ${this.title} </h2>
-  //   ` );
-
-  // $( '#photo-template' ).append( `
-  //   <p> ${this.description} </p>
-  //   ` );
-
-  // $( '#photo-template' ).append( `<img src='${this.img}' alt="">` );
-
-
-
+Photo.prototype.renderAll = function(){
+  let PhotoClone = $( '#photo-template' ).first().clone();
+  PhotoClone.find( 'h2' ).text( this.title );
+  PhotoClone.find( 'img' ).attr( 'src' , this.imageUrl );
+  PhotoClone.find( 'p' ).text( this.description );
+  PhotoClone.addClass( this.keyword );
+  $( 'main' ).append( PhotoClone );
+};
+const renderOption = option =>{
+  $( '#filter' ).append( `<option class="option"> ${option}</option>` );
 };
 
+/////////////////////////////////////////////////////
+//////////Functionss/////////////////////////////////
+/////////////////////////////////////////////////////
+
+function Photo( arrPhoto ) {
+  this.keyword = arrPhoto.keyword;
+  this.title = arrPhoto.title;
+  this.imageUrl = arrPhoto.image_url;
+  this.description = arrPhoto.description;
+  this.horns = arrPhoto.horns;
+  myArr.push( this );
+  optionArray.push( this.keyword );
+}
 
 
+// function renderSelected ( ) {
+//   let selected = $( '#filter' ).val();
+//   console.log( selected );
+//   $( '#photo-template' ).hide();
+//   $( `.${selected}` ).show();
+// }
+function renderSelected ( ) {
+  let selected = $( '#filter' ).val();
+  console.log( selected );
+  $( 'section' ).hide();
+  $( `.${selected}` ).show();
+}
 
+/////////////////////////////////////////////////////
+//////////Calling functions//////////////////////////
+/////////////////////////////////////////////////////
+
+$( '#filter' ).on( 'change', renderSelected );
