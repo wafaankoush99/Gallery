@@ -1,59 +1,66 @@
 'use strict';
 
-// This array is created to push the options of the drop list.
-let optionArray = [];
+/////////////////////////////////////////////////////
+//////////getting data from page-1.json//////////////
+/////////////////////////////////////////////////////
 
-// Get the data from the jason file
-$.ajax( '../data/page-1.json' )
+$.ajax( '/data/page-1.json' )
   .then( allData =>{
     allData.forEach( val =>{
-      let newItem = new Items( val );
-      console.log( newItem );
-      newItem.renderData();
+      let newItem = new Photo( val );
+      newItem.renderAll();
     } );
-    // Here we are preventing the repetition of the options of the drop list.
-    let dropList = [...new Set( optionArray )];
-    dropList.forEach( option=> renderOption( option ) );
-    // Here we are removing the first empty section rendered.
+    let listItems = [...new Set( optionArray )];
+    listItems.forEach( option=> renderOption( option ) );
     $( '#photo-template' ).first().remove();
   } );
 
 
-// Creating our main Constructor; note that it only takes one parameter.
-function Items( objectData ) {
-  this.imageUrl = objectData.image_url;
-  this.title = objectData.title;
-  this.description = objectData.description;
-  this.keyword = objectData.keyword;
-  this.horns = objectData.horns;
-  allItems.push( this );
-  optionArray.push( this.keyword );
-}
+/////////////////////////////////////////////////////
+//////////Global Variables///////////////////////////
+/////////////////////////////////////////////////////
 
-let allItems = [];
+let myArr = [];
+let optionArray = [];
 
-console.log( allItems );
-// To render the data in the HTML
-Items.prototype.renderData = function(){
-  let itemsClone = $( '#photo-template' ).first().clone();
-  itemsClone.find( 'h2' ).text( this.title );
-  itemsClone.find( 'img' ).attr( 'src' , this.imageUrl );
-  itemsClone.find( 'p' ).text( this.description );
-  console.log( this.title );
-  itemsClone.addClass( this.keyword );
-  $( 'main' ).append( itemsClone );
 
+/////////////////////////////////////////////////////
+//////////Prototype//Rendering///////////////////////
+/////////////////////////////////////////////////////
+
+Photo.prototype.renderAll = function(){
+  let PhotoClone = $( '#photo-template' ).first().clone();
+  PhotoClone.find( 'h2' ).text( this.title );
+  PhotoClone.find( 'img' ).attr( 'src' , this.imageUrl );
+  PhotoClone.find( 'p' ).text( this.description );
+  PhotoClone.addClass( this.keyword );
+  $( 'main' ).append( PhotoClone );
 };
-
-// Function to render the drop down list
 const renderOption = option =>{
   $( '#filter' ).append( `<option class="option"> ${option}</option>` );
 };
 
-// To render the selected items only on click.
-$( '#filter' ).on( 'change', renderSelected );
+/////////////////////////////////////////////////////
+//////////Functionss/////////////////////////////////
+/////////////////////////////////////////////////////
 
-// Function to render the selected items
+function Photo( arrPhoto ) {
+  this.keyword = arrPhoto.keyword;
+  this.title = arrPhoto.title;
+  this.imageUrl = arrPhoto.image_url;
+  this.description = arrPhoto.description;
+  this.horns = arrPhoto.horns;
+  myArr.push( this );
+  optionArray.push( this.keyword );
+}
+
+
+// function renderSelected ( ) {
+//   let selected = $( '#filter' ).val();
+//   console.log( selected );
+//   $( '#photo-template' ).hide();
+//   $( `.${selected}` ).show();
+// }
 function renderSelected ( ) {
   let selected = $( '#filter' ).val();
   console.log( selected );
@@ -61,6 +68,8 @@ function renderSelected ( ) {
   $( `.${selected}` ).show();
 }
 
+/////////////////////////////////////////////////////
+//////////Calling functions//////////////////////////
+/////////////////////////////////////////////////////
 
-
-
+$( '#filter' ).on( 'change', renderSelected );
