@@ -4,7 +4,7 @@
 //////////getting data from page-1.json//////////////
 /////////////////////////////////////////////////////
 
-$.ajax( '/data/page-1.json' )
+$.ajax( './data/page-1.json' )
   .then( allData =>{
     allData.forEach( val =>{
       let newItem = new Photo( val );
