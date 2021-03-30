@@ -1,64 +1,65 @@
 'use strict';
 
-$.ajax( '../data/page-1.json' ).then( arrOfObjGallery => {
-  arrOfObjGallery.forEach( photo => {
-    let newPhoto = new Photo( photo );
-    newPhoto.renderAll();
-    // console.log( photo );
-  } );
-} );
+// This array is created to push the options of the drop list.
+let optionArray = [];
 
-let myArr=[];
-function Photo( arrPhoto ) {
-  this.keyword= arrPhoto.keyword;
-  this.title = arrPhoto.title;
-  this.img = arrPhoto.image_url;
-  this.description = arrPhoto.description;
-  myArr.push( this );
+// Get the data from the jason file
+$.ajax( '../data/page-1.json' )
+  .then( allData =>{
+    allData.forEach( val =>{
+      let newItem = new Items( val );
+      console.log( newItem );
+      newItem.renderData();
+    } );
+    // Here we are preventing the repetition of the options of the drop list.
+    let dropList = [...new Set( optionArray )];
+    dropList.forEach( option=> renderOption( option ) );
+    // Here we are removing the first empty section rendered.
+    $( '#photo-template' ).first().remove();
+  } );
+
+
+// Creating our main Constructor; note that it only takes one parameter.
+function Items( objectData ) {
+  this.imageUrl = objectData.image_url;
+  this.title = objectData.title;
+  this.description = objectData.description;
+  this.keyword = objectData.keyword;
+  this.horns = objectData.horns;
+  allItems.push( this );
+  optionArray.push( this.keyword );
 }
 
-let arr =[];
-console.log( arr );
+let allItems = [];
 
-
-Photo.prototype.renderAll = function () {
-
-  $( 'select' ).append( `<option value="${this.keyword}">${this.keyword}</option>` );
-  //   console.log( $( 'option' ).text() );
-  if( ! arr.includes( $( 'option' ).text() ) ){
-    arr.push( $( 'option' ).text() );
-    $( 'select' ).append( $( 'option' ) );}
-
-    $('#photo-template').append('<div></div>');
-
-
-  // $('#photo-template').append('<div></div>');
-
-  $( 'div' ).prepend( `
-    <h2> ${this.title} </h2>
-    ` );
-
-  $( 'div' ).prepend( `
-    <p> ${this.description} </p>
-    ` );
-
-  $( 'div' ).prepend( `<img src='${this.img}' alt="">` );
-
-  $('#photo-template').append('<div></div>');
-
-  // $( '#photo-template' ).append( `
-  //   <h2> ${this.title} </h2>
-  //   ` );
-
-  // $( '#photo-template' ).append( `
-  //   <p> ${this.description} </p>
-  //   ` );
-
-  // $( '#photo-template' ).append( `<img src='${this.img}' alt="">` );
-
-
+console.log( allItems );
+// To render the data in the HTML
+Items.prototype.renderData = function(){
+  let itemsClone = $( '#photo-template' ).first().clone();
+  itemsClone.find( 'h2' ).text( this.title );
+  itemsClone.find( 'img' ).attr( 'src' , this.imageUrl );
+  itemsClone.find( 'p' ).text( this.description );
+  console.log( this.title );
+  itemsClone.addClass( this.keyword );
+  $( 'main' ).append( itemsClone );
 
 };
+
+// Function to render the drop down list
+const renderOption = option =>{
+  $( '#filter' ).append( `<option class="option"> ${option}</option>` );
+};
+
+// To render the selected items only on click.
+$( '#filter' ).on( 'change', renderSelected );
+
+// Function to render the selected items
+function renderSelected ( ) {
+  let selected = $( '#filter' ).val();
+  console.log( selected );
+  $( 'section' ).hide();
+  $( `.${selected}` ).show();
+}
 
 
 
