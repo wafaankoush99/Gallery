@@ -17,10 +17,10 @@
       <select class="filter" id="filter">
         <option value="default">Filter by Keyword</option>
       </select>
-      <select class="filter" id="filter">
+      <select class="sort">
         <option value="default">Sort by</option>
-        <option value="default">Names</option>
-        <option value="default">Numbers</option>
+        <option value="title" class="title">Names</option>
+        <option value="horns" >Numbers</option>
       </select>
       <div class="buttons">
       <button id = "page1" > Page 1 </button>
@@ -28,7 +28,7 @@
     </div>
     </header>
     <main>
-      <script id="dataPage2" type='text/x-tmpl-mustache' >
+      <script id="pageTemplate" type='text/x-tmpl-mustache' >
       <section class="{{keyword}}" id="photo-template">
         <h2 class="h2">{{title}}</h2>
         <div class="flip-card">

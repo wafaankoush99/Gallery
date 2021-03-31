@@ -18,13 +18,13 @@ let getData = ( path )=> {
 getData( './data/page-1.json' );
 $( '#page1' ).click( function () {
   $( 'section' ).hide();
-  $( 'select' ).empty();
+  $( '.filter' ).empty();
   optionArray = [];
   getData( './data/page-1.json' );
 } );
 $( '#page2' ).click( function () {
   $( 'section' ).hide();
-  $( 'select' ).empty();
+  $( '.filter' ).empty();
   optionArray = [];
   getData( './data/page-2.json' );
 } );
@@ -42,15 +42,7 @@ let optionArray = [];
 /////////////////////////////////////////////////////
 
 Photo.prototype.renderAll = function(){
-//   let PhotoClone = $( '#photo-template' ).first().clone();
-//   PhotoClone.find( 'h2' ).text( this.title );
-//   PhotoClone.find( 'img' ).attr( 'src' , this.imageUrl );
-//   PhotoClone.find( 'p' ).text( this.description );
-//   PhotoClone.addClass( this.keyword );
-//   $( 'main' ).append( PhotoClone );
-// };
-
-  let template = $( '#dataPage2' ).html();
+  let template = $( '#pageTemplate' ).html();
   let data = Mustache.render( template, this );
   $( 'main' ).append( data );
 };
@@ -85,7 +77,42 @@ function renderSelected ( ) {
 
 $( '#filter' ).on( 'change', renderSelected );
 
+//////////////////////////////////////////////////////
 
+$( '.sort' ).on( 'change', function(){
+  let getData = ( path )=> {
+    $.ajax( path )
+      .then( allData => {
+        let sortedData = $( '.sort' ).val();
+        console.log( sortedData );
+        allData.sort( ( a,b )=>{
+          if ( a[sortedData] < b[sortedData] ){return -1;}
+          else if ( a[sortedData] > b[sortedData] ){return 1;}
+          else return 0;
+        } );
+        console.log( allData );
+        $( 'section' ).remove();
 
+        allData.forEach( val=>{
+          console.log( val );
+          let newItem = new Photo( val );
+          newItem.renderAll();
+        } );
+      } );
+  };
 
+  getData( './data/page-1.json' );
+  $( '#page1' ).click( function () {
+    $( 'section' ).hide();
+    $( '.filter' ).empty();
+    optionArray = [];
+    getData( './data/page-1.json' );
+  } );
+  $( '#page2' ).click( function () {
+    $( 'section' ).hide();
+    $( '.filter' ).empty();
+    optionArray = [];
+    getData( './data/page-2.json' );
+  } );
 
+} );
