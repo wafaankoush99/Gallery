@@ -3,18 +3,31 @@
 /////////////////////////////////////////////////////
 //////////getting data from page-1.json//////////////
 /////////////////////////////////////////////////////
-
-$.ajax( './data/page-1.json' )
-  .then( allData =>{
-    allData.forEach( val =>{
-      let newItem = new Photo( val );
-      newItem.renderAll();
+let getData = ( path )=> {
+  $.ajax( path )
+    .then( allData =>{
+      allData.forEach( val =>{
+        let newItem = new Photo( val );
+        newItem.renderAll();
+      } );
+      let listItems = [...new Set( optionArray )];
+      listItems.forEach( option=> renderOption( option ) );
+      $( '#photo-template' ).first().remove();
     } );
-    let listItems = [...new Set( optionArray )];
-    listItems.forEach( option=> renderOption( option ) );
-    $( '#photo-template' ).first().remove();
-  } );
-
+};
+getData( './data/page-1.json' );
+$( '#page1' ).click( function () {
+  $( 'section' ).hide();
+  $( 'select' ).empty();
+  optionArray = [];
+  getData( './data/page-1.json' );
+} );
+$( '#page2' ).click( function () {
+  $( 'section' ).hide();
+  $( 'select' ).empty();
+  optionArray = [];
+  getData( './data/page-2.json' );
+} );
 
 /////////////////////////////////////////////////////
 //////////Global Variables///////////////////////////
@@ -29,15 +42,17 @@ let optionArray = [];
 /////////////////////////////////////////////////////
 
 Photo.prototype.renderAll = function(){
-  let PhotoClone = $( '#photo-template' ).first().clone();
-  PhotoClone.find( 'h2' ).text( this.title );
-  PhotoClone.find( 'img' ).attr( 'src' , this.imageUrl );
-  PhotoClone.find( 'p' ).text( this.description );
-  PhotoClone.addClass( this.keyword );
-  $( 'main' ).append( PhotoClone );
-};
-const renderOption = option =>{
-  $( '#filter' ).append( `<option class="option"> ${option}</option>` );
+//   let PhotoClone = $( '#photo-template' ).first().clone();
+//   PhotoClone.find( 'h2' ).text( this.title );
+//   PhotoClone.find( 'img' ).attr( 'src' , this.imageUrl );
+//   PhotoClone.find( 'p' ).text( this.description );
+//   PhotoClone.addClass( this.keyword );
+//   $( 'main' ).append( PhotoClone );
+// };
+
+  let template = $( '#dataPage2' ).html();
+  let data = Mustache.render( template, this );
+  $( 'main' ).append( data );
 };
 
 /////////////////////////////////////////////////////
@@ -54,13 +69,9 @@ function Photo( arrPhoto ) {
   optionArray.push( this.keyword );
 }
 
-
-// function renderSelected ( ) {
-//   let selected = $( '#filter' ).val();
-//   console.log( selected );
-//   $( '#photo-template' ).hide();
-//   $( `.${selected}` ).show();
-// }
+const renderOption = option =>{
+  $( '#filter' ).append( `<option class="option"> ${option}</option>` );
+};
 function renderSelected ( ) {
   let selected = $( '#filter' ).val();
   console.log( selected );
@@ -73,3 +84,8 @@ function renderSelected ( ) {
 /////////////////////////////////////////////////////
 
 $( '#filter' ).on( 'change', renderSelected );
+
+
+
+
+

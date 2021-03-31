@@ -21,7 +21,9 @@
     margin: 10px;
     border-radius: 2%;
 }
-
+.buttons{
+  display: inherit;
+}
 /*START FLIP CARD*/
   .flip-card {
     background-color: transparent;
