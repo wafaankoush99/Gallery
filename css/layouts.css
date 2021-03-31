@@ -1,9 +1,10 @@
 header {
     display: grid;
-    grid-template-columns: 3fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
     background-color: #22223b;
     color: white;
-    padding:20px;
+    padding: 20px;
+    gap: 20px;
 }
 
 h1 {
@@ -28,6 +29,13 @@ p {
     height: 200px;
 }
 
+img {
+    height: 200px;
+    width: 275px;
+    border-radius: 2%;
+    padding: 10px;
+
+}   
 
 /*START SELECT*/
 select {
