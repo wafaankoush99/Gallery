@@ -1,10 +1,24 @@
+# photo-gallery
 
-Number and name of feature: ________________________________
 
-Estimate of time needed to complete: _____
+## feature#1
 
-Start time: _____
+Estimate of time needed to complete: 30 min
 
-Finish time: _____
+Actual time needed to complete: 1 hour 
 
-Actual time needed to complete: _____
+***
+
+## feature#2
+
+Estimate of time needed to complete: 2 hours
+
+Actual time needed to complete: 4 hours
+
+***
+
+## feature#3
+
+Estimate of time needed to complete: 2 hours
+
+Actual time needed to complete: 1 hours
